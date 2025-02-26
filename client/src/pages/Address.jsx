@@ -26,7 +26,7 @@ const Address = () => {
         }
       })
       if(response.data.success){
-        toast.success("Address Remove")
+        toast.success("Address Removed")
         if(fetchAddress){
           fetchAddress()
         }
