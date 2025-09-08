@@ -1,6 +1,6 @@
 {
     "version" : 2,
-    "name" : "Blankit",
+    "name" : "Blankiyt",
     "builds" : [
         {
             "src" : "./index.js",
