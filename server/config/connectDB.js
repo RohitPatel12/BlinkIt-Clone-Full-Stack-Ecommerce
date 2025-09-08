@@ -25,8 +25,6 @@ async function connectDB() {
     // ❌ No existing connection, create a new one
     cached.promise = mongoose
       .connect(process.env.MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
       })
       .then((mongoose) => mongoose);
   }
