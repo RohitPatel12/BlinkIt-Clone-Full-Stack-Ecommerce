@@ -8,8 +8,8 @@
     "lint": "eslint .",
     "build": "vite build",
     "preview": "vite preview",
-    "vercel-build": "npm run fix-perms && vite build",
-    "fix-perms": "chmod +x node_modules/.bin/*"
+    "vercel-build": "vite build"
+
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
