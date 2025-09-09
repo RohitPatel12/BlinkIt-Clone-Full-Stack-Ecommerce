@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "build": "npx vite build",
     "vercel-build": "npx vite build"
-  },
+  },   
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
     "@stripe/stripe-js": "^4.6.0",
