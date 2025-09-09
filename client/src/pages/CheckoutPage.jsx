@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect} from 'react'
 import { useGlobalContext } from '../provider/GlobalProvider'
 import { DisplayPriceInRupees } from '../utils/DisplayPriceInRupees'
 import AddAddress from '../components/AddAddress'
@@ -14,9 +14,25 @@ const CheckoutPage = () => {
   const { notDiscountTotalPrice, totalPrice, totalQty, fetchCartItem,fetchOrder } = useGlobalContext()
   const [openAddress, setOpenAddress] = useState(false)
   const addressList = useSelector(state => state.addresses.addressList)
-  const [selectAddress, setSelectAddress] = useState(0)
+  const [selectAddress, setSelectAddress] = useState(null)
   const cartItemsList = useSelector(state => state.cartItem.cart)
   const navigate = useNavigate()
+
+ useEffect(() => {
+  if (addressList.length > 0) {
+    const defaultAddr = addressList.find(addr => addr.isDefault)
+    if (defaultAddr) {
+      setSelectAddress(defaultAddr._id)
+    } else {
+      setSelectAddress(addressList[0]._id) // fallback: first address
+    }
+  } else {
+    // no address -> ask user to add one
+    setOpenAddress(true)
+    setSelectAddress(null)
+  }
+}, [addressList])
+
 
   const handleCashOnDelivery = async() => {
       try {
@@ -24,7 +40,8 @@ const CheckoutPage = () => {
             ...SummaryApi.CashOnDeliveryOrder,
             data : {
               list_items : cartItemsList,
-              addressId : addressList[selectAddress]?._id,
+              // addressId : addressList[selectAddress]?._id,
+              addressId: selectAddress,
               subTotalAmt : totalPrice,
               totalAmt :  totalPrice,
             }
@@ -62,7 +79,8 @@ const CheckoutPage = () => {
             ...SummaryApi.payment_url,
             data : {
               list_items : cartItemsList,
-              addressId : addressList[selectAddress]?._id,
+              // addressId : addressList[selectAddress]?._id,
+              addressId: selectAddress,
               subTotalAmt : totalPrice,
               totalAmt :  totalPrice,
             }
@@ -89,26 +107,34 @@ const CheckoutPage = () => {
           {/***address***/}
           <h3 className='text-lg font-semibold'>Choose your address</h3>
           <div className='bg-white p-2 grid gap-4'>
-            {
-              addressList.map((address, index) => {
-                return (
-                  <label htmlFor={"address" + index} className={!address.status && "hidden"}>
-                    <div className='border rounded p-3 flex gap-3 hover:bg-blue-50'>
-                      <div>
-                        <input id={"address" + index} type='radio' value={index} onChange={(e) => setSelectAddress(e.target.value)} name='address' />
-                      </div>
-                      <div>
-                        <p>{address.address_line}</p>
-                        <p>{address.city}</p>
-                        <p>{address.state}</p>
-                        <p>{address.country} - {address.pincode}</p>
-                        <p>{address.mobile}</p>
-                      </div>
-                    </div>
-                  </label>
-                )
-              })
-            }
+            {addressList.map((address) => {
+  if (!address.status) return null; // skip inactive
+
+  return (
+    <label key={address._id} htmlFor={`address-${address._id}`}>
+      <div className='border rounded p-3 flex gap-3 hover:bg-blue-50'>
+        <div>
+          <input
+            id={`address-${address._id}`}
+            type="radio"
+            name="address"
+            value={address._id}
+            checked={selectAddress === address._id}
+            onChange={(e) => setSelectAddress(e.target.value)}
+          />
+        </div>
+        <div>
+          <p>{address.address_line}</p>
+          <p>{address.city}</p>
+          <p>{address.state}</p>
+          <p>{address.country} - {address.pincode}</p>
+          <p>{address.mobile}</p>
+        </div>
+      </div>
+    </label>
+  )
+})}
+
             <div onClick={() => setOpenAddress(true)} className='h-16 bg-blue-50 border-2 border-dashed flex justify-center items-center cursor-pointer'>
               Add address
             </div>
@@ -141,10 +167,25 @@ const CheckoutPage = () => {
             </div>
           </div>
           <div className='w-full flex flex-col gap-4'>
-            <button className='py-2 px-4 bg-green-600 hover:bg-green-700 rounded text-white font-semibold' onClick={handleOnlinePayment}>Online Payment</button>
+  <button
+    disabled={!selectAddress}
+    className={`py-2 px-4 rounded font-semibold text-white 
+      ${selectAddress ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400 cursor-not-allowed'}`}
+    onClick={handleOnlinePayment}
+  >
+    Online Payment
+  </button>
 
-            <button className='py-2 px-4 border-2 border-green-600 font-semibold text-green-600 hover:bg-green-600 hover:text-white' onClick={handleCashOnDelivery}>Cash on Delivery</button>
+  <button
+    disabled={!selectAddress}
+    className={`py-2 px-4 border-2 font-semibold 
+      ${selectAddress ? 'border-green-600 text-green-600 hover:bg-green-600 hover:text-white' : 'border-gray-400 text-gray-400 cursor-not-allowed'}`}
+    onClick={handleCashOnDelivery}
+  >
+    Cash on Delivery
+  </button>
           </div>
+
         </div>
       </div>
 
@@ -154,6 +195,10 @@ const CheckoutPage = () => {
           <AddAddress close={() => setOpenAddress(false)} />
         )
       }
+      {addressList.length === 0 && (
+       <p className="text-red-500 text-sm mt-2">Please add an address before placing an order.</p>
+    )}
+
     </section>
   )
 }

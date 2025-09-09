@@ -138,6 +138,11 @@ const SummaryApi = {
         url : '/api/address/update',
         method : 'put'
     },
+    setDefaultAddress: {
+        url: "/api/address/set-default",
+        method: "put"
+    },
+
     disableAddress : {
         url : '/api/address/disable',
         method : 'delete'
