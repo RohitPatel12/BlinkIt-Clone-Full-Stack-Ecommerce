@@ -41,7 +41,9 @@ const orderSchema = new mongoose.Schema({
     invoice_receipt : {
         type : String,
         default : ""
-    }
+    },
+    delivery_address: { type: mongoose.Schema.Types.ObjectId, ref: "Address", required: true }
+
 },{
     timestamps : true
 })

@@ -17,7 +17,8 @@ const EditAddressDetails = ({close, data}) => {
             state : data.state,
             country : data.country,
             pincode : data.pincode,
-            mobile : data.mobile 
+            mobile : data.mobile,
+            isDefault : data.isDefault 
         }
     })
     const { fetchAddress } = useGlobalContext()
@@ -33,7 +34,8 @@ const EditAddressDetails = ({close, data}) => {
                     state : data.state,
                     country : data.country,
                     pincode : data.pincode,
-                    mobile : data.mobile
+                    mobile : data.mobile,
+                    isDefault : data.isDefault
                 }
             })
 
@@ -115,6 +117,17 @@ const EditAddressDetails = ({close, data}) => {
                         {...register("mobile",{required : true})}
                     />
                 </div>
+
+                <div className="flex items-center gap-2">
+                    <input
+                    type="checkbox"
+                    id="isDefault"
+                    {...register("isDefault")}
+                    defaultChecked={data.isDefault}
+                    />
+                    <label htmlFor="isDefault">Set as default</label>
+                </div>
+
 
                 <button type='submit' className='bg-primary-200 w-full  py-2 font-semibold mt-4 hover:bg-primary-100'>Submit</button>
             </form>
