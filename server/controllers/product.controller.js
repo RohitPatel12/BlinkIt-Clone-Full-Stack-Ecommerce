@@ -250,7 +250,7 @@ export const deleteProductDetails = async(request,response)=>{
         const deleteProduct = await ProductModel.deleteOne({_id : _id })
 
         return response.json({
-            message : "Delete successfully",
+            message : "Deleted successfully",
             error : false,
             success : true,
             data : deleteProduct

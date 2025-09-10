@@ -98,7 +98,7 @@ export const deleteSubCategoryController = async(request,response)=>{
         const deleteSub = await SubCategoryModel.findByIdAndDelete(_id)
 
         return response.json({
-            message : "Delete successfully",
+            message : "Deleted successfully",
             data : deleteSub,
             error : false,
             success : true

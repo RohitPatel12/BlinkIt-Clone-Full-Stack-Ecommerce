@@ -25,7 +25,7 @@ export async function registerUserController(request,response){
 
         if(user){
             return response.json({
-                message : "Already register email",
+                message : "Email Already registered",
                 error : true,
                 success : false
             })
@@ -55,7 +55,7 @@ export async function registerUserController(request,response){
         })
 
         return response.json({
-            message : "User register successfully",
+            message : "User registered successfully",
             error : false,
             success : true,
             data : save
@@ -89,7 +89,7 @@ export async function verifyEmailController(request,response){
         })
 
         return response.json({
-            message : "Verify email done",
+            message : "Email verified successfully",
             success : true,
             error : false
         })
@@ -120,7 +120,7 @@ export async function loginController(request,response){
 
         if(!user){
             return response.status(400).json({
-                message : "User not register",
+                message : "User not registered",
                 error : true,
                 success : false
             })
@@ -160,7 +160,7 @@ export async function loginController(request,response){
         response.cookie('refreshToken',refreshToken,cookiesOption)
 
         return response.json({
-            message : "Login successfully",
+            message : "Login successful",
             error : false,
             success : true,
             data : {
@@ -197,7 +197,7 @@ export async function logoutController(request,response){
         })
 
         return response.json({
-            message : "Logout successfully",
+            message : "Logout successfull",
             error : false,
             success : true
         })
@@ -375,7 +375,7 @@ export async function verifyForgotPasswordOtp(request,response){
         })
         
         return response.json({
-            message : "Verify otp successfully",
+            message : "Otp Verification successfull",
             error : false,
             success : true
         })
@@ -512,7 +512,7 @@ export async function userDetails(request,response){
         })
     } catch (error) {
         return response.status(500).json({
-            message : "Something is wrong",
+            message : "Something went wrong",
             error : true,
             success : false
         })
